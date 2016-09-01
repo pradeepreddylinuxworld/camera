@@ -796,7 +796,7 @@
 };
 
 &i2c_12 {
-	status = "disabled";
+	status = "ok";
 };
 
 &spi_11 {
