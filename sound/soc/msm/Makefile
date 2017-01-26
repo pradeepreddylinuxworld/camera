@@ -20,6 +20,7 @@ obj-$(CONFIG_SND_SOC_CPE) += snd-soc-cpe.o
 snd-soc-msm8994-objs := msm8994.o
 obj-$(CONFIG_SND_SOC_MSM8994) += snd-soc-msm8994.o
 
+EXTRA_CFLAGS := -I$(src)
 # for MSM8996 sound card driver
 snd-soc-msm8996-objs := msm8996.o apq8096-auto.o apq8096-i2c.o
 obj-$(CONFIG_SND_SOC_MSM8996) += snd-soc-msm8996.o

@@ -4,6 +4,7 @@
 
 ccflags-y			:= -I$(srctree)/drivers/usb/gadget/
 ccflags-y			+= -I$(srctree)/drivers/usb/gadget/udc/
+EXTRA_CFLAGS := -I$(src)
 
 # USB Functions
 usb_f_acm-y			:= f_acm.o

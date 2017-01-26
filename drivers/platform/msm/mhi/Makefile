@@ -1,4 +1,5 @@
 # Makefile for MHI driver
+EXTRA_CFLAGS := -I$(src)
 obj-y += mhi_main.o
 obj-y += mhi_iface.o
 obj-y += mhi_init.o
