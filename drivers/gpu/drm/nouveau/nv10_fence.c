@@ -22,7 +22,7 @@
  * Authors: Ben Skeggs <bskeggs@redhat.com>
  */
 
-#include "nouveau_drm.h"
+#include "nouveau_drv.h"
 #include "nouveau_dma.h"
 #include "nv10_fence.h"
 
@@ -50,7 +50,7 @@ nv10_fence_sync(struct nouveau_fence *fence,
 u32
 nv10_fence_read(struct nouveau_channel *chan)
 {
-	return nvif_rd32(chan, 0x0048);
+	return nvif_rd32(&chan->user, 0x0048);
 }
 
 void
@@ -107,7 +107,7 @@ nv10_fence_create(struct nouveau_drm *drm)
 	priv->base.context_new = nv10_fence_context_new;
 	priv->base.context_del = nv10_fence_context_del;
 	priv->base.contexts = 31;
-	priv->base.context_base = fence_context_alloc(priv->base.contexts);
+	priv->base.context_base = dma_fence_context_alloc(priv->base.contexts);
 	spin_lock_init(&priv->lock);
 	return 0;
 }
