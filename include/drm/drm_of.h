@@ -11,7 +11,7 @@ struct drm_encoder;
 struct device_node;
 
 #ifdef CONFIG_OF
-extern uint32_t drm_of_find_possible_crtcs(struct drm_device *dev,
+extern int drm_of_find_possible_crtcs(struct drm_device *dev,
 					   struct device_node *port);
 extern void drm_of_component_match_add(struct device *master,
 				       struct component_match **matchptr,
