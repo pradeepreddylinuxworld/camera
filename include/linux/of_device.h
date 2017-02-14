@@ -33,6 +33,8 @@ extern int of_device_add(struct platform_device *pdev);
 extern int of_device_register(struct platform_device *ofdev);
 extern void of_device_unregister(struct platform_device *ofdev);
 
+extern const void *of_device_get_match_data(const struct device *dev);
+
 extern ssize_t of_device_get_modalias(struct device *dev,
 					char *str, ssize_t len);
 
