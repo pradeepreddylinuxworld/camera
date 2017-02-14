@@ -417,15 +417,16 @@ static int tz_start(struct devfreq *devfreq)
 	for (i = 0; adreno_tz_attr_list[i] != NULL; i++)
 		device_create_file(&devfreq->dev, adreno_tz_attr_list[i]);
 
-	return kgsl_devfreq_add_notifier(devfreq->dev.parent, &priv->nb);
+//	return kgsl_devfreq_add_notifier(devfreq->dev.parent, &priv->nb);
+	return 0;
 }
 
 static int tz_stop(struct devfreq *devfreq)
 {
 	int i;
-	struct devfreq_msm_adreno_tz_data *priv = devfreq->data;
+	//struct devfreq_msm_adreno_tz_data *priv = devfreq->data;
 
-	kgsl_devfreq_del_notifier(devfreq->dev.parent, &priv->nb);
+	//kgsl_devfreq_del_notifier(devfreq->dev.parent, &priv->nb);
 
 	for (i = 0; adreno_tz_attr_list[i] != NULL; i++)
 		device_remove_file(&devfreq->dev, adreno_tz_attr_list[i]);
