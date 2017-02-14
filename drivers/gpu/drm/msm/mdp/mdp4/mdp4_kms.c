@@ -227,6 +227,7 @@ int mdp4_enable(struct mdp4_kms *mdp4_kms)
 
 static struct device_node *mdp4_detect_lcdc_panel(struct drm_device *dev)
 {
+#if 0
 	struct device_node *endpoint, *panel_node;
 	struct device_node *np = dev->dev->of_node;
 
@@ -250,6 +251,9 @@ static struct device_node *mdp4_detect_lcdc_panel(struct drm_device *dev)
 	of_node_put(endpoint);
 
 	return panel_node;
+#else
+	return NULL;
+#endif
 }
 
 static int mdp4_modeset_init_intf(struct mdp4_kms *mdp4_kms,
