@@ -89,7 +89,7 @@ static void msm_hdmi_destroy(struct hdmi *hdmi)
 
 	platform_set_drvdata(hdmi->pdev, NULL);
 }
-
+/*
 static int msm_hdmi_get_phy(struct hdmi *hdmi)
 {
 	struct platform_device *pdev = hdmi->pdev;
@@ -117,7 +117,7 @@ static int msm_hdmi_get_phy(struct hdmi *hdmi)
 
 	return 0;
 }
-
+*/
 /* construct hdmi at bind/probe time, grab all the resources.  If
  * we are to EPROBE_DEFER we want to do it here, rather than later
  * at modeset_init() time
@@ -248,13 +248,13 @@ static struct hdmi *msm_hdmi_init(struct platform_device *pdev)
 		hdmi->i2c = NULL;
 		goto fail;
 	}
-
+/*
 	ret = msm_hdmi_get_phy(hdmi);
 	if (ret) {
 		dev_err(&pdev->dev, "failed to get phy\n");
 		goto fail;
 	}
-
+*/
 	hdmi->hdcp_ctrl = msm_hdmi_hdcp_init(hdmi);
 	if (IS_ERR(hdmi->hdcp_ctrl)) {
 		dev_warn(&pdev->dev, "failed to init hdcp: disabled\n");
