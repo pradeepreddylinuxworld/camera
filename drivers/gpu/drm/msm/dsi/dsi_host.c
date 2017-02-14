@@ -1549,6 +1549,7 @@ static const int supported_data_lane_swaps[][4] = {
 	{ 3, 2, 1, 0 },
 };
 
+#if 0
 static int dsi_host_parse_lane_data(struct msm_dsi_host *msm_host,
 				    struct device_node *ep)
 {
@@ -1611,9 +1612,10 @@ static int dsi_host_parse_lane_data(struct msm_dsi_host *msm_host,
 
 	return -EINVAL;
 }
-
+#endif
 static int dsi_host_parse_dt(struct msm_dsi_host *msm_host)
 {
+#if 0
 	struct device *dev = &msm_host->pdev->dev;
 	struct device_node *np = dev->of_node;
 	struct device_node *endpoint, *device_node;
@@ -1664,6 +1666,10 @@ err:
 	of_node_put(endpoint);
 
 	return ret;
+#else
+	return 0;
+#endif
+
 }
 
 static int dsi_host_get_id(struct msm_dsi_host *msm_host)
