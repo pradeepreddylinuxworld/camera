@@ -14,7 +14,7 @@
 #include <linux/clk-provider.h>
 
 #include "hdmi.h"
-
+#if 0
 #define HDMI_VCO_MAX_FREQ			12000000000UL
 #define HDMI_VCO_MIN_FREQ			8000000000UL
 
@@ -748,9 +748,9 @@ int msm_hdmi_pll_8996_init(struct platform_device *pdev)
 		dev_err(dev, "failed to register pll clock\n");
 		return -EINVAL;
 	}
-
 	return 0;
 }
+#endif
 
 static const char * const hdmi_phy_8996_reg_names[] = {
 	"vddio",
