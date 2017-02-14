@@ -4047,12 +4047,12 @@ static int smbchg_register_chg_led(struct smbchg_chip *chip)
 	chip->led_cdev.brightness_set = smbchg_chg_led_brightness_set;
 	chip->led_cdev.brightness_get = smbchg_chg_led_brightness_get;
 
-	rc = led_classdev_register(chip->dev, &chip->led_cdev);
-	if (rc) {
-		dev_err(chip->dev, "unable to register charger led, rc=%d\n",
-				rc);
-		return rc;
-	}
+//	rc = led_classdev_register(chip->dev, &chip->led_cdev);
+//	if (rc) {
+//		dev_err(chip->dev, "unable to register charger led, rc=%d\n",
+//				rc);
+//		return rc;
+//	}
 
 	rc = sysfs_create_group(&chip->led_cdev.dev->kobj,
 			&smbchg_led_attr_group);
@@ -8123,8 +8123,8 @@ static int smbchg_probe(struct spmi_device *spmi)
 	return 0;
 
 unregister_led_class:
-	if (chip->cfg_chg_led_support && chip->schg_version == QPNP_SCHG_LITE)
-		led_classdev_unregister(&chip->led_cdev);
+//	if (chip->cfg_chg_led_support && chip->schg_version == QPNP_SCHG_LITE)
+//		led_classdev_unregister(&chip->led_cdev);
 unregister_dc_psy:
 	power_supply_unregister(&chip->dc_psy);
 unregister_batt_psy:
