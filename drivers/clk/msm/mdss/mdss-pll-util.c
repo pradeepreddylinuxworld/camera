@@ -19,7 +19,7 @@
 #include <linux/clk/msm-clock-generic.h>
 #include <linux/of_address.h>
 #include <linux/dma-mapping.h>
-
+#include <linux/mdss_io_util.h>
 #include "mdss-pll.h"
 
 int mdss_pll_util_resource_init(struct platform_device *pdev,
