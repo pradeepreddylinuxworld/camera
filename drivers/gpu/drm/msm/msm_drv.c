@@ -249,10 +249,11 @@ static int msm_drm_uninit(struct device *dev)
 	}
 
 	if (priv->vram.paddr) {
-//		unsigned long attrs = DMA_ATTR_NO_KERNEL_MAPPING;
+		DEFINE_DMA_ATTRS(attrs);
+		dma_set_attr(DMA_ATTR_NO_KERNEL_MAPPING, &attrs);
 		drm_mm_takedown(&priv->vram.mm);
-//		dma_free_attrs(dev, priv->vram.size, NULL,
-//			       priv->vram.paddr, attrs);
+		dma_free_attrs(dev, priv->vram.size, NULL,
+			priv->vram.paddr, &attrs);
 	}
 
 	component_unbind_all(dev, ddev);
