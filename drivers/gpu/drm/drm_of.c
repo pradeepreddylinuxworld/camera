@@ -46,11 +46,11 @@ static uint32_t drm_crtc_port_mask(struct drm_device *dev,
  *
  * See Documentation/devicetree/bindings/graph.txt for the bindings.
  */
-uint32_t drm_of_find_possible_crtcs(struct drm_device *dev,
+int drm_of_find_possible_crtcs(struct drm_device *dev,
 				    struct device_node *port)
 {
 	struct device_node *remote_port, *ep;
-	uint32_t possible_crtcs = 0;
+	int possible_crtcs = 0;
 
 	for_each_endpoint_of_node(port, ep) {
 		remote_port = of_graph_get_remote_port(ep);
