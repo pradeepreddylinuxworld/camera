@@ -117,7 +117,7 @@ void msm_hdmi_phy_powerdown(struct hdmi_phy *phy)
 
 	phy->cfg->powerdown(phy);
 }
-
+#if 0
 static int msm_hdmi_phy_pll_init(struct platform_device *pdev,
 			     enum hdmi_phy_type type)
 {
@@ -142,7 +142,7 @@ static int msm_hdmi_phy_pll_init(struct platform_device *pdev,
 
 	return ret;
 }
-
+#endif
 static int msm_hdmi_phy_probe(struct platform_device *pdev)
 {
 	struct device *dev = &pdev->dev;
@@ -174,14 +174,14 @@ static int msm_hdmi_phy_probe(struct platform_device *pdev)
 	ret = msm_hdmi_phy_resource_enable(phy);
 	if (ret)
 		return ret;
-
+/*
 	ret = msm_hdmi_phy_pll_init(pdev, phy->cfg->type);
 	if (ret) {
 		dev_err(dev, "couldn't init PLL\n");
 		msm_hdmi_phy_resource_disable(phy);
 		return ret;
 	}
-
+*/
 	msm_hdmi_phy_resource_disable(phy);
 
 	platform_set_drvdata(pdev, phy);
@@ -205,8 +205,8 @@ static const struct of_device_id msm_hdmi_phy_dt_match[] = {
 	  .data = &msm_hdmi_phy_8x74_cfg },
 	{ .compatible = "qcom,hdmi-phy-8084",
 	  .data = &msm_hdmi_phy_8x74_cfg },
-//	{ .compatible = "qcom,hdmi-phy-8996",
-//	  .data = &msm_hdmi_phy_8996_cfg },
+	{ .compatible = "qcom,hdmi-phy-8996",
+	  .data = &msm_hdmi_phy_8996_cfg },
 	{}
 };
 
