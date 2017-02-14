@@ -19,7 +19,7 @@
 #include <linux/of_irq.h>
 #include <linux/of_gpio.h>
 
-#include <sound/hdmi-codec.h>
+//#include <sound/hdmi-codec.h>
 #include "hdmi.h"
 
 void msm_hdmi_set_mode(struct hdmi *hdmi, bool power_on)
@@ -454,7 +454,7 @@ static int msm_hdmi_get_gpio(struct device_node *of_node, const char *name)
 	}
 	return gpio;
 }
-
+#if 0
 /*
  * HDMI audio codec callbacks
  */
@@ -559,7 +559,7 @@ static int msm_hdmi_register_audio_driver(struct hdmi *hdmi, struct device *dev)
 							 sizeof(codec_data));
 	return PTR_ERR_OR_ZERO(hdmi->audio_pdev);
 }
-
+#endif
 static int msm_hdmi_bind(struct device *dev, struct device *master, void *data)
 {
 	struct drm_device *drm = dev_get_drvdata(master);
@@ -567,10 +567,13 @@ static int msm_hdmi_bind(struct device *dev, struct device *master, void *data)
 	static struct hdmi_platform_config *hdmi_cfg;
 	struct hdmi *hdmi;
 	struct device_node *of_node = dev->of_node;
-	int i, err;
+//	int i, err;
+	int i;
+
 
 	hdmi_cfg = (struct hdmi_platform_config *)
 			of_device_get_match_data(dev);
+
 	if (!hdmi_cfg) {
 		dev_err(dev, "unknown hdmi_cfg: %s\n", of_node->name);
 		return -ENXIO;
@@ -594,11 +597,11 @@ static int msm_hdmi_bind(struct device *dev, struct device *master, void *data)
 		return PTR_ERR(hdmi);
 	priv->hdmi = hdmi;
 
-	err = msm_hdmi_register_audio_driver(hdmi, dev);
-	if (err) {
-		DRM_ERROR("Failed to attach an audio codec %d\n", err);
-		hdmi->audio_pdev = NULL;
-	}
+//	err = msm_hdmi_register_audio_driver(hdmi, dev);
+//	if (err) {
+//		DRM_ERROR("Failed to attach an audio codec %d\n", err);
+//		hdmi->audio_pdev = NULL;
+//	}
 
 	return 0;
 }
