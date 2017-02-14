@@ -88,6 +88,7 @@
 		label = "MDSS HDMI PLL";
 		#clock-cells = <1>;
 
+        cell-index = <0>;
 		reg = <0x9a0600 0xb10>,
 		      <0x9a1200 0x0c8>,
 		      <0x8C2300 0x8>;
