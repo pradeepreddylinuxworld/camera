@@ -148,10 +148,10 @@ void msm_gem_shrinker_init(struct drm_device *dev)
 	priv->shrinker.count_objects = msm_gem_shrinker_count;
 	priv->shrinker.scan_objects = msm_gem_shrinker_scan;
 	priv->shrinker.seeks = DEFAULT_SEEKS;
-	WARN_ON(register_shrinker(&priv->shrinker));
+//	WARN_ON(register_shrinker(&priv->shrinker));
 
 	priv->vmap_notifier.notifier_call = msm_gem_shrinker_vmap;
-	WARN_ON(register_vmap_purge_notifier(&priv->vmap_notifier));
+//	WARN_ON(register_vmap_purge_notifier(&priv->vmap_notifier));
 }
 
 /**
@@ -165,7 +165,7 @@ void msm_gem_shrinker_cleanup(struct drm_device *dev)
 	struct msm_drm_private *priv = dev->dev_private;
 
 	if (priv->shrinker.nr_deferred) {
-		WARN_ON(unregister_vmap_purge_notifier(&priv->vmap_notifier));
+//		WARN_ON(unregister_vmap_purge_notifier(&priv->vmap_notifier));
 		unregister_shrinker(&priv->shrinker);
 	}
 }
