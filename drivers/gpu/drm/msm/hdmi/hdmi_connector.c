@@ -402,6 +402,7 @@ static int msm_hdmi_connector_mode_valid(struct drm_connector *connector,
 	 * mdp4/dtv stuff where pixel clk is assigned to mdp/encoder
 	 * instead):
 	 */
+    if (0)
 	if (config->pwr_clk_cnt > 0)
 		actual = clk_round_rate(hdmi->pwr_clks[0], actual);
 
