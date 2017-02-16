@@ -1258,7 +1258,7 @@ static void ion_dma_buf_kunmap(struct dma_buf *dmabuf, unsigned long offset,
 			       void *ptr)
 {
 }
-
+#if 0
 static int ion_dma_buf_begin_cpu_access(struct dma_buf *dmabuf, size_t start,
 					size_t len,
 					enum dma_data_direction direction)
@@ -1288,14 +1288,15 @@ static void ion_dma_buf_end_cpu_access(struct dma_buf *dmabuf, size_t start,
 	ion_buffer_kmap_put(buffer);
 	mutex_unlock(&buffer->lock);
 }
+#endif
 
 static struct dma_buf_ops dma_buf_ops = {
 	.map_dma_buf = ion_map_dma_buf,
 	.unmap_dma_buf = ion_unmap_dma_buf,
 	.mmap = ion_mmap,
 	.release = ion_dma_buf_release,
-	.begin_cpu_access = ion_dma_buf_begin_cpu_access,
-	.end_cpu_access = ion_dma_buf_end_cpu_access,
+	//.begin_cpu_access = ion_dma_buf_begin_cpu_access,
+	//.end_cpu_access = ion_dma_buf_end_cpu_access,
 	.kmap_atomic = ion_dma_buf_kmap,
 	.kunmap_atomic = ion_dma_buf_kunmap,
 	.kmap = ion_dma_buf_kmap,
@@ -1305,6 +1306,7 @@ static struct dma_buf_ops dma_buf_ops = {
 struct dma_buf *ion_share_dma_buf(struct ion_client *client,
 						struct ion_handle *handle)
 {
+	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
 	struct ion_buffer *buffer;
 	struct dma_buf *dmabuf;
 	bool valid_handle;
@@ -1319,9 +1321,18 @@ struct dma_buf *ion_share_dma_buf(struct ion_client *client,
 	buffer = handle->buffer;
 	ion_buffer_get(buffer);
 	mutex_unlock(&client->lock);
-
+#if 0
 	dmabuf = dma_buf_export(buffer, &dma_buf_ops, buffer->size, O_RDWR,
 				NULL);
+#else
+	exp_info.ops = &dma_buf_ops;
+	exp_info.size = buffer->size;
+	exp_info.flags = O_RDWR;
+	exp_info.priv = buffer;
+
+	dmabuf = dma_buf_export(&exp_info);
+
+#endif
 	if (IS_ERR(dmabuf)) {
 		ion_buffer_put(buffer);
 		return dmabuf;
