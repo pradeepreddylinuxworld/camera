@@ -238,7 +238,7 @@
 		qcom,thermal-node;
 	};
 };
-
+/*
 &mdss_hdmi_tx {
 	qcom,conti-splash-enabled;
 	qcom,hdmi-tx-hpd = <&tlmm 34 0>;
@@ -256,7 +256,7 @@
 	pinctrl-4 = <&mdss_hdmi_hpd_suspend &mdss_hdmi_ddc_suspend
 						&mdss_hdmi_cec_suspend>;
 };
-
+*/
 &pmi8994_vadc {
 	chan@0 {
 		label = "usbin";
@@ -302,7 +302,7 @@
 		qcom,fast-avg-setup = <0>;
 	};
 };
-
+/*
 #include "msm8996-mdss-panels.dtsi"
 
 &dsi_hx8379a_fwvga_truly_vid {
@@ -336,7 +336,7 @@
 &mdss_dsi1 {
 	status = "disabled";
 };
-
+*/
 &labibb {
 	status = "ok";
 	qpnp,qpnp-labibb-mode = "lcd";
@@ -561,7 +561,7 @@
 			"SpkrRight IN", "SPK2 OUT";
 
 		qcom,hdmi-audio-rx;
-		asoc-codec = <&stub_codec>, <&hdmi_audio>;
+//		asoc-codec = <&stub_codec>, <&hdmi_audio>;
 		asoc-codec-names = "msm-stub-codec.1",
 					"msm-hdmi-audio-codec-rx";
 	};
