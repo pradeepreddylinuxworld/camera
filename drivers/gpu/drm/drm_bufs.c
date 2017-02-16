@@ -469,7 +469,7 @@ int drm_legacy_getmap_ioctl(struct drm_device *dev, void *data,
 	map->type = r_list->map->type;
 	map->flags = r_list->map->flags;
 	map->handle = (void *)(unsigned long) r_list->user_token;
-	map->mtrr = arch_phys_wc_index(r_list->map->mtrr);
+//	map->mtrr = arch_phys_wc_index(r_list->map->mtrr);
 
 	mutex_unlock(&dev->struct_mutex);
 
