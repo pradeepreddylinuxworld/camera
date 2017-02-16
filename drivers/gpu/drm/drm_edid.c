@@ -1445,12 +1445,12 @@ EXPORT_SYMBOL(drm_get_edid);
 struct edid *drm_get_edid_switcheroo(struct drm_connector *connector,
 				     struct i2c_adapter *adapter)
 {
-	struct pci_dev *pdev = connector->dev->pdev;
+//	struct pci_dev *pdev = connector->dev->pdev;
 	struct edid *edid;
 
-	vga_switcheroo_lock_ddc(pdev);
+//	vga_switcheroo_lock_ddc(pdev);
 	edid = drm_get_edid(connector, adapter);
-	vga_switcheroo_unlock_ddc(pdev);
+//	vga_switcheroo_unlock_ddc(pdev);
 
 	return edid;
 }
