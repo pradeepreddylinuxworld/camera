@@ -42,7 +42,7 @@
  * drm_debug: Enable debug output.
  * Bitmask of DRM_UT_x. See include/drm/drmP.h for details.
  */
-unsigned int drm_debug = 0x0F;
+unsigned int drm_debug = 0x00;
 EXPORT_SYMBOL(drm_debug);
 
 MODULE_AUTHOR("Gareth Hughes, Leif Delgass, José Fonseca, Jon Smirl");
