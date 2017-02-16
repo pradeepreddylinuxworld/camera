@@ -3343,6 +3343,8 @@ static int reset_intel_82599_sfp_virtfn(struct pci_dev *dev, int probe)
 #define MSG_CTL			0x45010
 #define NSDE_PWR_STATE		0xd0100
 #define IGD_OPERATION_TIMEOUT	10000     /* set timeout 10 seconds */
+#define PCH_PP_STATUS		0xc7200
+#define PCH_PP_CONTROL		0xc7204
 
 static int reset_ivb_igd(struct pci_dev *dev, int probe)
 {
@@ -3365,7 +3367,7 @@ static int reset_ivb_igd(struct pci_dev *dev, int probe)
 	 * the bits have been set by i915 previously, so we clobber
 	 * SOUTH_CHICKEN2 register directly here.
 	 */
-	iowrite32(0x00000005, mmio_base + SOUTH_CHICKEN2);
+	iowrite32(0x00000005, mmio_base + 0xc2004);
 
 	val = ioread32(mmio_base + PCH_PP_CONTROL) & 0xfffffffe;
 	iowrite32(val, mmio_base + PCH_PP_CONTROL);
