@@ -5,3 +5,4 @@ obj-$(CONFIG_MSM_MDSS_PLL) += mdss-dsi-pll-28lpm.o
 obj-$(CONFIG_MSM_MDSS_PLL) += mdss-dsi-pll-8996.o
 obj-$(CONFIG_MSM_MDSS_PLL) += mdss-dsi-pll-8996-util.o
 obj-$(CONFIG_MSM_MDSS_PLL) += mdss-hdmi-pll-8996.o
+obj-$(CONFIG_MSM_MDSS_PLL) += ../../../video/msm/mdss/mdss_io_util.o
