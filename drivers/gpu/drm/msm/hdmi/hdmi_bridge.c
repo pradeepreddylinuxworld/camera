@@ -87,7 +87,7 @@ static void power_off(struct drm_bridge *bridge)
 }
 
 #define AVI_IFRAME_LINE_NUMBER 1
-
+#if 0
 static void msm_hdmi_config_avi_infoframe(struct hdmi *hdmi)
 {
 	struct drm_crtc *crtc = hdmi->encoder->crtc;
@@ -144,7 +144,7 @@ static void msm_hdmi_config_avi_infoframe(struct hdmi *hdmi)
 	val |= AVI_IFRAME_LINE_NUMBER;
 	hdmi_write(hdmi, REG_HDMI_INFOFRAME_CTRL1, val);
 }
-
+#endif
 static void msm_hdmi_bridge_pre_enable(struct drm_bridge *bridge)
 {
 	struct hdmi_bridge *hdmi_bridge = to_hdmi_bridge(bridge);
@@ -157,7 +157,7 @@ static void msm_hdmi_bridge_pre_enable(struct drm_bridge *bridge)
 		msm_hdmi_phy_resource_enable(phy);
 		msm_hdmi_power_on(bridge);
 		hdmi->power_on = true;
-		msm_hdmi_config_avi_infoframe(hdmi);
+	//	msm_hdmi_config_avi_infoframe(hdmi);
 		msm_hdmi_audio_update(hdmi);
 	}
 
