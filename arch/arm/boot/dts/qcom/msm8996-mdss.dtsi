@@ -126,6 +126,10 @@ mdss: mdss@900000 {
 						};
 					};
 				};
+
+				hdmi_audio: qcom,msm-hdmi-audio-rx {
+					compatible = "qcom,msm-hdmi-audio-codec-rx";
+				};
 			};
 
 			hdmi_phy: hdmi-phy@9a0600 {

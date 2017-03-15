@@ -322,6 +322,15 @@ int msm_hdmi_modeset_init(struct hdmi *hdmi,
 		goto fail;
 	}
 
+        ret = of_platform_populate(pdev->dev.of_node, NULL, NULL, &pdev->dev);
+        if (ret) {
+                dev_err(dev->dev, "%s: Failed to add child devices. rc=%d\n",
+                        __func__, ret);
+                goto fail;
+        } else {
+                dev_dbg(dev->dev, "%s: Add child devices.\n", __func__);
+        }
+
 	encoder->bridge = hdmi->bridge;
 
 	priv->bridges[priv->num_bridges++]       = hdmi->bridge;
