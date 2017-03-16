@@ -83,11 +83,13 @@ static inline int unregister_hdmi_cable_notification(
 		struct hdmi_cable_notify *handler) {
 	return 0;
 }
-
+int msm_hdmi_register_audio_codec(struct platform_device *pdev,
+	struct msm_hdmi_audio_codec_ops *ops);
+/*
 static inline int msm_hdmi_register_audio_codec(struct platform_device *pdev,
 		struct msm_hdmi_audio_codec_ops *ops) {
 	return 0;
-}
+}*/
 #endif /* CONFIG_FB_MSM_MDSS_HDMI_PANEL */
 
 #endif /*_MSM_HDMI_H_*/

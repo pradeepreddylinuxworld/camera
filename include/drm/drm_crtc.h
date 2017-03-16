@@ -48,6 +48,7 @@
 #include <drm/drm_blend.h>
 #include <drm/drm_color_mgmt.h>
 #include <drm/drm_debugfs_crc.h>
+#include <drm/drm_edid.h>
 
 struct drm_device;
 struct drm_mode_set;
@@ -1421,6 +1422,9 @@ extern int drm_crtc_force_disable_all(struct drm_device *dev);
 extern void drm_mode_config_init(struct drm_device *dev);
 extern void drm_mode_config_reset(struct drm_device *dev);
 extern void drm_mode_config_cleanup(struct drm_device *dev);
+
+extern int drm_edid_to_sad(struct edid *edid, struct cea_sad **sads);
+extern int drm_edid_to_speaker_allocation(struct edid *edid, u8 **sadb);
 
 extern int drm_mode_set_config_internal(struct drm_mode_set *set);
 

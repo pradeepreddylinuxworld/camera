@@ -212,10 +212,13 @@ static inline int msm_hdmi_pll_8996_init(struct platform_device *pdev)
  * audio:
  */
 /* Supported HDMI Audio channels and rates */
-#define	MSM_HDMI_AUDIO_CHANNEL_2	0
-#define	MSM_HDMI_AUDIO_CHANNEL_4	1
-#define	MSM_HDMI_AUDIO_CHANNEL_6	2
-#define	MSM_HDMI_AUDIO_CHANNEL_8	3
+#define MSM_HDMI_AUDIO_CHANNEL_2        2
+#define MSM_HDMI_AUDIO_CHANNEL_3        3
+#define MSM_HDMI_AUDIO_CHANNEL_4        4
+#define MSM_HDMI_AUDIO_CHANNEL_5        5
+#define MSM_HDMI_AUDIO_CHANNEL_6        6
+#define MSM_HDMI_AUDIO_CHANNEL_7        7
+#define MSM_HDMI_AUDIO_CHANNEL_8        8
 
 #define	HDMI_SAMPLE_RATE_32KHZ		0
 #define	HDMI_SAMPLE_RATE_44_1KHZ	1
