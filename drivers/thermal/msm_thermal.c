@@ -763,7 +763,7 @@ static int devmgr_client_cpufreq_update(struct device_manager_data *dev_mgr)
 	if (freq_mitigation_task) {
 		complete(&freq_mitigation_complete);
 	} else {
-		pr_err("Frequency mitigation task is not initialized\n");
+//		pr_err("Frequency mitigation task is not initialized\n");
 		ret = -ESRCH;
 	}
 
@@ -793,7 +793,7 @@ static int devmgr_client_hotplug_update(struct device_manager_data *dev_mgr)
 	if (hotplug_task) {
 		complete(&hotplug_notify_complete);
 	} else {
-		pr_err("Hotplug task is not initialized\n");
+	//	pr_err("Hotplug task is not initialized\n");
 		ret = -ESRCH;
 	}
 
