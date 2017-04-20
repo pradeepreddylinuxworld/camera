@@ -14,7 +14,9 @@
 #include <linux/elf.h>
 #include <linux/types.h>
 #include <linux/cpumask.h>
-#include <linux/qcom_scm.h>
+//#include <linux/qcom_scm.h>
+#include <soc/qcom/scm.h>
+#include <soc/qcom/subsystem_restart.h>
 #include <linux/dma-mapping.h>
 #include <linux/of_reserved_mem.h>
 #include "msm_gem.h"
@@ -23,7 +25,7 @@
 
 extern bool hang_debug;
 static void a5xx_dump(struct msm_gpu *gpu);
-
+int a5xx_microcode_load1(void);
 static inline bool _check_segment(const struct elf32_phdr *phdr)
 {
 	return ((phdr->p_type == PT_LOAD) &&
@@ -75,7 +77,45 @@ static int __pil_tz_load_image(struct platform_device *pdev,
 
 	return ret;
 }
+int a5xx_microcode_load1(void)
+{
+	void *ptr;
 
+	int zap_ucode_loaded=0;
+
+	/*
+	 * Resume call to write the zap shader base address into the
+	 * appropriate register
+	 */
+
+	/* Load the zap shader firmware through PIL if its available */
+	if (!zap_ucode_loaded) {
+		ptr = subsystem_get("a530_zap");
+		pr_err("a530_zap subsystem is up \n");
+		/* Return error if the zap shader cannot be loaded */
+		if (IS_ERR_OR_NULL(ptr))
+			return (ptr == NULL) ? -ENODEV : PTR_ERR(ptr);
+
+		zap_ucode_loaded = 1;
+	}
+	if (zap_ucode_loaded) {
+		int ret;
+		struct scm_desc desc = {0};
+
+		desc.args[0] = 0;
+		desc.args[1] = 13;
+		desc.arginfo = SCM_ARGS(2);
+
+		ret = scm_call2(SCM_SIP_FNID(SCM_SVC_BOOT, 0xA), &desc);
+		if (ret) {
+			pr_err("SCM resume call failed with error %d\n", ret);
+			return ret;
+		}
+
+	}
+
+	return 0;
+}
 static int _pil_tz_load_image(struct platform_device *pdev)
 {
 	char str[64] = { 0 };
@@ -149,6 +189,8 @@ static int _pil_tz_load_image(struct platform_device *pdev)
 		goto out;
 
 	fw_size = (size_t) (fw_max_addr - fw_min_addr);
+	a5xx_microcode_load1();
+
 #if 0
 	/* Verify the MDT header */
 	ret = qcom_scm_pas_init_image(pas_id, mdt->data, mdt->size);
@@ -474,15 +516,7 @@ static int a5xx_ucode_init(struct msm_gpu *gpu)
 
 static int a5xx_zap_shader_resume(struct msm_gpu *gpu)
 {
-//	int ret;
-#if 0
-	ret = qcom_scm_gpu_zap_resume();
-	if (ret)
-		DRM_ERROR("%s: zap-shader resume failed: %d\n",
-			gpu->name, ret);
 
-	return ret;
-#endif
     return 0;
 }
 
