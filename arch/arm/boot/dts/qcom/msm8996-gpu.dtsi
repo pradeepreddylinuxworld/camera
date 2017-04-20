@@ -50,166 +50,54 @@
 			<  13763 /*  1804 MHz */ >;
 	};
 
-	msm_gpu: qcom,kgsl-3d0@b00000 {
-		label = "kgsl-3d0";
-		compatible = "qcom,kgsl-3d0", "qcom,kgsl-3d";
-		status = "ok";
-		reg = <0xb00000 0x3f000
-		       0x070000 0x04720>;
-		reg-names = "kgsl_3d0_reg_memory", "qfprom_memory";
-		interrupts = <0 300 0>;
-		interrupt-names = "kgsl_3d0_irq";
-		qcom,id = <0>;
+	msm_gpu: gpu@b00000 {
+			compatible = "qcom,adreno-530.2", "qcom,adreno";
+			status = "ok";
+			reg = <0xb00000 0x3f000
+			       0x070000 0x04720>;
+			reg-names = "kgsl_3d0_reg_memory", "qfprom_memory";
+			interrupts = <0 300 0>;
+			interrupt-names = "kgsl_3d0_irq";
 
-		qcom,chipid = <0x05030000>;
-		qcom,base-leakage-coefficient = <34>;
-		qcom,lm-limit = <6000>;
+			clocks = <&clock_gpu clk_gpu_gx_gfx3d_clk>,
+				<&clock_gpu clk_gpu_ahb_clk>,
+				<&clock_gpu clk_gpu_gx_rbbmtimer_clk>,
+				<&clock_gcc clk_gcc_bimc_gfx_clk>,
+				<&clock_gcc clk_gcc_mmss_bimc_gfx_clk>,
+				<&clock_mmss clk_mmss_mmagic_ahb_clk>;
 
-		qcom,initial-pwrlevel = <2>;
+			clock-names = "core", "iface", "rbbmtimer",
+				"mem", "mem_iface", "alt_mem_iface";
 
-		qcom,idle-timeout = <80>; //msecs
-		/*
-		 * Timeout to enter deeper power saving state
-		 * from NAP.
-		 */
-		qcom,deep-nap-timeout = <20>; //msecs
-		qcom,strtstp-sleepwake;
-
-		/* Trace bus */
-		coresight-id = <300>;
-		coresight-name = "coresight-gfx";
-		coresight-nr-inports = <0>;
-		coresight-outports = <0>;
-		coresight-child-list = <&funnel_in0>;
-		coresight-child-ports = <4>;
-
-		clocks = <&clock_gpu clk_gpu_gx_gfx3d_clk>,
-			<&clock_gpu clk_gpu_ahb_clk>,
-			<&clock_gpu clk_gpu_gx_rbbmtimer_clk>,
-			<&clock_gcc clk_gcc_bimc_gfx_clk>,
-			<&clock_gcc clk_gcc_mmss_bimc_gfx_clk>,
-			<&clock_mmss clk_mmss_mmagic_ahb_clk>,
-			<&clock_gpu clk_gpu_mx_clk>;
-
-		clock-names = "core_clk", "iface_clk", "rbbmtimer_clk",
-			"mem_clk", "mem_iface_clk", "alt_mem_iface_clk",
-			"mx_clk";
-
-		/* Bus Scale Settings */
-		qcom,gpubw-dev = <&gpubw>;
-		qcom,bus-control;
-		qcom,msm-bus,name = "grp3d";
-		qcom,msm-bus,num-cases = <13>;
-		qcom,msm-bus,num-paths = <1>;
-		qcom,msm-bus,vectors-KBps =
-				<26 512 0 0>,
-
-				<26 512 0 800000>,      // 1 bus=100
-				<26 512 0 1200000>,     // 2 bus=150
-				<26 512 0 1600000>,     // 3 bus=200
-				<26 512 0 2400000>,     // 4 bus=300
-				<26 512 0 3296000>,     // 5 bus=412
-				<26 512 0 4376000>,     // 6 bus=547
-				<26 512 0 5448000>,     // 7 bus=681
-				<26 512 0 6144000>,     // 8 bus=768
-				<26 512 0 8136000>,     // 9 bus=1017
-				<26 512 0 10368000>,    // 10 bus=1296
-				<26 512 0 12440000>,    // 11 bus=1555
-				<26 512 0 14432000>;    // 12 bus=1804
-
-		/* GDSC regulator names */
-		regulator-names = "vddcx", "vdd";
-		/* GDSC oxili regulators */
-		vddcx-supply = <&gdsc_gpu>;
-		vdd-supply = <&gdsc_gpu_gx>;
-
-		/* Power levels */
-		qcom,gpu-pwrlevels {
-			#address-cells = <1>;
-			#size-cells = <0>;
-
-			compatible = "qcom,gpu-pwrlevels";
-
-			qcom,gpu-pwrlevel@0 {
-				reg = <0>;
-				qcom,gpu-freq = <480000000>;
-				qcom,bus-freq = <11>;
-				qcom,bus-min = <10>;
-				qcom,bus-max = <11>;
-			};
-
-			qcom,gpu-pwrlevel@1 {
-				reg = <1>;
-				qcom,gpu-freq = <360000000>;
-				qcom,bus-freq = <10>;
-				qcom,bus-min = <9>;
-				qcom,bus-max = <11>;
-			};
-
-			qcom,gpu-pwrlevel@2 {
-				reg = <2>;
-				qcom,gpu-freq = <205000000>;
-				qcom,bus-freq = <7>;
-				qcom,bus-min = <6>;
-				qcom,bus-max = <8>;
-			};
-
-			qcom,gpu-pwrlevel@3 {
-				reg = <3>;
-				qcom,gpu-freq = <120000000>;
-				qcom,bus-freq = <4>;
-				qcom,bus-min = <3>;
-				qcom,bus-max = <5>;
-			};
-
-			qcom,gpu-pwrlevel@4 {
-				reg = <4>;
-				qcom,gpu-freq = <60000000>;
-				qcom,bus-freq = <2>;
-				qcom,bus-min = <1>;
-				qcom,bus-max = <3>;
-			};
-
-			qcom,gpu-pwrlevel@5 {
-				reg = <5>;
-				qcom,gpu-freq = <27000000>;
-				qcom,bus-freq = <0>;
-				qcom,bus-min = <0>;
-				qcom,bus-max = <0>;
-			};
-		};
-
-	};
-
-	kgsl_msm_iommu: qcom,kgsl-iommu {
-		compatible = "qcom,kgsl-smmu-v2";
-
-		reg = <0xb40000 0x20000>;
-		qcom,protect = <0x40000 0x20000>;
-		qcom,micro-mmu-control = <0x6000>;
-
-		clocks = <&clock_mmss clk_mmss_mmagic_ahb_clk>,
-			<&clock_mmss clk_mmss_mmagic_cfg_ahb_clk>,
-			<&clock_gpu clk_gpu_ahb_clk>,
-			<&clock_gcc clk_gcc_mmss_bimc_gfx_clk>,
-			<&clock_gcc clk_gcc_bimc_gfx_clk>;
-		clock-names = "mmagic_ahb_clk", "mmagic_cfg_ahb_clk", "gpu_ahb_clk",
-			"gcc_mmss_bimc_gfx_clk", "gcc_bimc_gfx_clk";
-
-		qcom,secure_align_mask = <0xfff>;
-		qcom,retention;
-		qcom,hyp_secure_alloc;
-
-		gfx3d_user: gfx3d_user {
-			compatible = "qcom,smmu-kgsl-cb";
-			label = "gfx3d_user";
 			iommus = <&kgsl_smmu 0>;
-			qcom,gpu-offset = <0x48000>;
-		};
+			/* GDSC regulator names */
+			regulator-names = "vddcx", "vdd";
+			/* GDSC oxili regulators */
+			vddcx-supply = <&gdsc_gpu>;
+			vdd-supply = <&gdsc_gpu_gx>;
+			qcom,gpu-quirk-two-pass-use-wfi;
+			qcom,gpu-quirk-fault-detect-mask;
+			/* This is a safe speed for bring up in all bin levels.
+			 * This isn't the fastest the chip can go, but we can
+			 * get there eventually */
+			qcom,gpu-pwrlevels {
+				compatible = "qcom,gpu-pwrlevels";
+				qcom,gpu-pwrlevel@0 {
+					qcom,gpu-freq = <510000000>;
+				};
+				qcom,gpu-pwrlevel@1 {
+					qcom,gpu-freq = <27000000>;
+				};
+			};
 
-		gfx3d_secure: gfx3d_secure {
-			compatible = "qcom,smmu-kgsl-cb";
-			iommus = <&kgsl_smmu 2>;
-		};
+			qcom,zap-shader {
+				compatible = "qcom,zap-shader";
+				memory-region = <&peripheral_mem>;
+
+				qcom,firmware = "a530_zap";
+				qcom,pas-id = <13>;
+			};
+
 	};
+
 };
