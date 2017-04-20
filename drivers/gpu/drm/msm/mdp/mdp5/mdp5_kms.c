@@ -116,13 +116,13 @@ static void mdp5_prepare_commit(struct msm_kms *kms, struct drm_atomic_state *st
 
 static void mdp5_complete_commit(struct msm_kms *kms, struct drm_atomic_state *state)
 {
-	int i;
+//	int i;
 	struct mdp5_kms *mdp5_kms = to_mdp5_kms(to_mdp_kms(kms));
-	struct drm_plane *plane;
-	struct drm_plane_state *plane_state;
+//	struct drm_plane *plane;
+//	struct drm_plane_state *plane_state;
 
-	for_each_plane_in_state(state, plane, plane_state, i)
-		mdp5_plane_complete_commit(plane, plane_state);
+//	for_each_plane_in_state(state, plane, plane_state, i)
+//		mdp5_plane_complete_commit(plane, plane_state);
 
 	if (mdp5_kms->smp)
 		mdp5_smp_complete_commit(mdp5_kms->smp, &mdp5_kms->state->smp);
@@ -448,8 +448,8 @@ static int modeset_init(struct mdp5_kms *mdp5_kms)
 	const struct mdp5_cfg_hw *hw_cfg;
 	unsigned int num_crtcs;
 	int i, ret, pi = 0, ci = 0;
-	struct drm_plane *primary[6] = { NULL };
-	struct drm_plane *cursor[6] = { NULL };
+	struct drm_plane *primary[MAX_BASES] = { NULL };
+	struct drm_plane *cursor[MAX_BASES] = { NULL };
 
 	hw_cfg = mdp5_cfg_get_hw_config(mdp5_kms->cfg);
 
@@ -865,8 +865,9 @@ static int hwpipe_init(struct mdp5_kms *mdp5_kms)
 		return ret;
 
 	/* Construct cursor pipes: */
-	ret = construct_pipes(mdp5_kms, hw_cfg->pipe_cursor.count, cursor_planes,
-			hw_cfg->pipe_cursor.base, hw_cfg->pipe_cursor.caps);
+	ret = construct_pipes(mdp5_kms, hw_cfg->pipe_cursor.count,
+			cursor_planes, hw_cfg->pipe_cursor.base,
+			hw_cfg->pipe_cursor.caps);
 	if (ret)
 		return ret;
 

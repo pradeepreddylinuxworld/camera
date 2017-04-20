@@ -24,6 +24,7 @@ static struct mdp5_kms *get_kms(struct drm_encoder *encoder)
 
 #ifdef CONFIG_MSM_BUS_SCALING
 #include <linux/msm-bus.h>
+#include <linux/msm-bus-board.h>
 
 static void bs_set(struct mdp5_encoder *mdp5_cmd_enc, int idx)
 {

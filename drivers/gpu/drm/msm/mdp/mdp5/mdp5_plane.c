@@ -50,7 +50,7 @@ static struct mdp5_kms *get_kms(struct drm_plane *plane)
 
 static bool plane_enabled(struct drm_plane_state *state)
 {
-	return state->fb && state->crtc;
+	return state->visible;
 }
 
 static void mdp5_plane_destroy(struct drm_plane *plane)
@@ -187,7 +187,6 @@ mdp5_plane_atomic_print_state(struct drm_printer *p,
 	drm_printf(p, "\tzpos=%u\n", pstate->zpos);
 	drm_printf(p, "\talpha=%u\n", pstate->alpha);
 	drm_printf(p, "\tstage=%s\n", stage2name(pstate->stage));
-	drm_printf(p, "\tpending=%u\n", pstate->pending);
 }
 
 static void mdp5_plane_reset(struct drm_plane *plane)
@@ -228,7 +227,7 @@ mdp5_plane_duplicate_state(struct drm_plane *plane)
 	if (mdp5_state && mdp5_state->base.fb)
 		drm_framebuffer_reference(mdp5_state->base.fb);
 
-	mdp5_state->pending = false;
+//	mdp5_state->pending = false;
 
 	return &mdp5_state->base;
 }
@@ -306,9 +305,10 @@ static int mdp5_plane_atomic_check_with_state(struct drm_crtc_state *crtc_state,
 	struct mdp5_cfg *config = mdp5_cfg_get_config(get_kms(plane)->cfg);
 	bool new_hwpipe = false;
 	uint32_t max_width, max_height;
+	uint32_t caps = 0;
 	struct drm_rect clip;
 	int min_scale, max_scale;
-	uint32_t caps = 0;
+//	uint32_t caps = 0;
 	int ret;
 
 	DBG("%s: check (%d -> %d)", plane->name,
@@ -318,8 +318,8 @@ static int mdp5_plane_atomic_check_with_state(struct drm_crtc_state *crtc_state,
 	 * some day, we would need to disallow in cases where hwpipe
 	 * changes
 	 */
-	if (WARN_ON(to_mdp5_plane_state(old_state)->pending))
-		return -EBUSY;
+	//if (WARN_ON(to_mdp5_plane_state(old_state)->pending))
+	//	return -EBUSY;
 
 	max_width = config->hw->lm.max_width << 16;
 	max_height = config->hw->lm.max_height << 16;
@@ -428,13 +428,10 @@ static void mdp5_plane_atomic_update(struct drm_plane *plane,
 				     struct drm_plane_state *old_state)
 {
 	struct drm_plane_state *state = plane->state;
-	struct mdp5_plane_state *mdp5_state = to_mdp5_plane_state(state);
 
 	DBG("%s: update", plane->name);
 
-	mdp5_state->pending = true;
-
-	if (plane_enabled(state) && state->visible) {
+	if (plane_enabled(state)) {
 		int ret;
 
 		ret = mdp5_plane_mode_set(plane,
@@ -959,7 +956,8 @@ static int mdp5_update_cursor_plane_legacy(struct drm_plane *plane,
 		mdp5_ctl_commit(ctl, mdp5_plane_get_flush(plane));
 	}
 
-	*to_mdp5_plane_state(plane_state) = *to_mdp5_plane_state(new_plane_state);
+	*to_mdp5_plane_state(plane_state) =
+		*to_mdp5_plane_state(new_plane_state);
 
 	mdp5_plane_destroy_state(plane, new_plane_state);
 
@@ -992,17 +990,9 @@ uint32_t mdp5_plane_get_flush(struct drm_plane *plane)
 	return pstate->hwpipe->flush_mask;
 }
 
-/* called after vsync in thread context */
-void mdp5_plane_complete_commit(struct drm_plane *plane,
-	struct drm_plane_state *state)
-{
-	struct mdp5_plane_state *pstate = to_mdp5_plane_state(plane->state);
-
-	pstate->pending = false;
-}
-
 /* initialize plane */
-struct drm_plane *mdp5_plane_init(struct drm_device *dev, enum drm_plane_type type)
+struct drm_plane *mdp5_plane_init(struct drm_device *dev,
+				  enum drm_plane_type type)
 {
 	struct drm_plane *plane = NULL;
 	struct mdp5_plane *mdp5_plane;
