@@ -203,6 +203,8 @@ int msm_dsi_modeset_init(struct msm_dsi *msm_dsi, struct drm_device *dev,
 		goto fail;
 	}
 
+	msm_dsi->encoder = encoder;
+
 	msm_dsi->bridge = msm_dsi_manager_bridge_init(msm_dsi->id);
 	if (IS_ERR(msm_dsi->bridge)) {
 		ret = PTR_ERR(msm_dsi->bridge);
@@ -210,9 +212,6 @@ int msm_dsi_modeset_init(struct msm_dsi *msm_dsi, struct drm_device *dev,
 		msm_dsi->bridge = NULL;
 		goto fail;
 	}
-
-	encoder->bridge = msm_dsi->bridge;
-	msm_dsi->encoder = encoder;
 
 	/*
 	 * check if the dsi encoder output is connected to a panel or an
