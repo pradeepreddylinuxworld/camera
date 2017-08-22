@@ -35,6 +35,7 @@ struct v4l2_of_bus_mipi_csi2 {
 	unsigned char data_lanes[4];
 	unsigned char clock_lane;
 	unsigned short num_data_lanes;
+	bool lane_polarities[5];
 };
 
 /**

@@ -1,0 +1,34 @@
+config VIDEO_QCOM_CAMSS
+        tristate "Qualcomm 8x96 V4L2 Camera Subsystem driver"
+        depends on ARCH_MSM && VIDEO_V4L2
+        select VIDEOBUF2_DMA_SG
+
+config MSM_CCI
+        tristate "Qualcomm MSM camera control interface driver"
+        depends on ARCH_MSM && VIDEO_V4L2
+
+config OV5645
+        tristate "OmniVision OV5645 sensor support"
+        depends on OF
+        depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+	depends on MEDIA_CAMERA_SUPPORT
+        depends on MSM_CCI
+        ---help---
+          This is a Video4Linux2 sensor-level driver for the OmniVision
+          OV5645 camera.
+
+          To compile this driver as a module, choose M here: the
+          module will be called ov5645.
+
+config OV5640
+        tristate "OmniVision OV5640 sensor support"
+        depends on OF
+        depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+	depends on MEDIA_CAMERA_SUPPORT
+        depends on MSM_CCI
+        ---help---
+          This is a Video4Linux2 sensor-level driver for the OmniVision
+          OV5640 camera.
+
+          To compile this driver as a module, choose M here: the
+          module will be called ov5640.

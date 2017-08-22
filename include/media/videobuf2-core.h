@@ -442,6 +442,34 @@ struct vb2_queue {
 #endif
 };
 
+
+/**
+ * struct vb2_v4l2_buffer - video buffer information for v4l2
+ *
+ * @vb2_buf:	video buffer 2
+ * @flags:	buffer informational flags
+ * @field:	enum v4l2_field; field order of the image in the buffer
+ * @timecode:	frame timecode
+ * @sequence:	sequence count of this frame
+ *
+ * Should contain enough information to be able to cover all the fields
+ * of struct v4l2_buffer at videodev2.h
+ */
+struct vb2_v4l2_buffer {
+	struct vb2_buffer	vb2_buf;
+
+	__u32			flags;
+	__u32			field;
+	struct v4l2_timecode	timecode;
+	__u32			sequence;
+};
+
+/*
+ * to_vb2_v4l2_buffer() - cast struct vb2_buffer * to struct vb2_v4l2_buffer *
+ */
+#define to_vb2_v4l2_buffer(vb) \
+	container_of(vb, struct vb2_v4l2_buffer, vb2_buf)
+
 void *vb2_plane_vaddr(struct vb2_buffer *vb, unsigned int plane_no);
 void *vb2_plane_cookie(struct vb2_buffer *vb, unsigned int plane_no);
 

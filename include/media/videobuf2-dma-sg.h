@@ -23,4 +23,7 @@ static inline struct sg_table *vb2_dma_sg_plane_desc(
 
 extern const struct vb2_mem_ops vb2_dma_sg_memops;
 
+struct dma_buf *vb2_dma_sg_get_dmabuf(void *buf, size_t size, unsigned long flags);
+
+
 #endif

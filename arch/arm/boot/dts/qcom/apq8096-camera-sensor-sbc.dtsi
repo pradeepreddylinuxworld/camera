@@ -15,6 +15,7 @@
  * Note: default configuration is for self-powered camera modules.
  */
 &cci {
+#if 0
 	actuator0: qcom,actuator@0 {
 		cell-index = <0>;
 		reg = <0x0>;
@@ -195,6 +196,8 @@
 			<&clock_mmss clk_camss_mclk2_clk>;
 		clock-names = "cam_src_clk", "cam_clk";
 	};
+#endif
+
 
 #if 0
 	qcom,camera@2 {

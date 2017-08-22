@@ -1215,10 +1215,19 @@ static struct regulator *create_regulator(struct regulator_dev *rdev,
 		if (regulator->supply_name == NULL)
 			goto overflow_err;
 
-		err = sysfs_create_link(&rdev->dev.kobj, &dev->kobj,
+//		err = sysfs_create_link(&rdev->dev.kobj, &dev->kobj,
+//					buf);
+/*We don't consider a failure to add the sysfs node as a problem,
+ * so use sysfs_create_link_nowarn() so that we don't print a
+ * backtrace when duplicated files exist. Also, downgrade the printk
+ * message to a debug statement so that we're quiet here. This
+ * allows multiple drivers to request a CPU's regulator so that
+ * CPUfreq and AVSish drivers can coexist.*/
+
+        err = sysfs_create_link_nowarn(&rdev->dev.kobj, &dev->kobj,
 					buf);
 		if (err) {
-			rdev_warn(rdev, "could not add device link %s err %d\n",
+			rdev_dbg(rdev, "could not add device link %s err %d\n",
 				  dev->kobj.name, err);
 			/* non-fatal */
 		}

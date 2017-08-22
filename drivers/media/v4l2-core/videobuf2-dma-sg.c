@@ -45,6 +45,105 @@ struct vb2_dma_sg_buf {
 
 static void vb2_dma_sg_put(void *buf_priv);
 
+
+/*********************************************/
+/*         DMABUF ops for dummy exporters          */
+/*********************************************/
+
+struct vb2_dma_sg_attachment {
+	struct sg_table sgt;
+	enum dma_data_direction dma_dir;
+};
+
+static int vb2_dma_sg_dmabuf_ops_attach(struct dma_buf *dbuf, struct device *dev,
+	struct dma_buf_attachment *dbuf_attach)
+{
+	pr_err("%s \n", __func__);
+	return 0;
+}
+
+static void vb2_dma_sg_dmabuf_ops_detach(struct dma_buf *dbuf,
+	struct dma_buf_attachment *db_attach)
+{
+	pr_err("%s \n", __func__);
+
+}
+
+static struct sg_table *vb2_dma_sg_dmabuf_ops_map(
+	struct dma_buf_attachment *db_attach, enum dma_data_direction dma_dir)
+{
+	pr_err("%s \n", __func__);
+
+
+	return NULL;
+}
+
+static void vb2_dma_sg_dmabuf_ops_unmap(struct dma_buf_attachment *db_attach,
+	struct sg_table *sgt, enum dma_data_direction dma_dir)
+{
+	/* nothing to be done here */
+	pr_err("%s \n", __func__);
+}
+
+static void vb2_dma_sg_dmabuf_ops_release(struct dma_buf *dbuf)
+{
+	/* drop reference obtained in vb2_dma_sg_get_dmabuf */
+	pr_err("%s \n", __func__);
+}
+
+static void *vb2_dma_sg_dmabuf_ops_kmap(struct dma_buf *dbuf, unsigned long pgnum)
+{
+	pr_err("%s \n", __func__);
+	return NULL;
+
+}
+
+static void *vb2_dma_sg_dmabuf_ops_vmap(struct dma_buf *dbuf)
+{
+	pr_err("%s \n", __func__);
+
+	return NULL;
+
+}
+
+static int vb2_dma_sg_dmabuf_ops_mmap(struct dma_buf *dbuf,
+	struct vm_area_struct *vma)
+{
+	pr_err("%s \n", __func__);
+
+	return 0;
+}
+
+static struct dma_buf_ops vb2_dma_sg_dmabuf_ops = {
+	.attach = vb2_dma_sg_dmabuf_ops_attach,
+	.detach = vb2_dma_sg_dmabuf_ops_detach,
+	.map_dma_buf = vb2_dma_sg_dmabuf_ops_map,
+	.unmap_dma_buf = vb2_dma_sg_dmabuf_ops_unmap,
+	.kmap = vb2_dma_sg_dmabuf_ops_kmap,
+	.kmap_atomic = vb2_dma_sg_dmabuf_ops_kmap,
+	.vmap = vb2_dma_sg_dmabuf_ops_vmap,
+	.mmap = vb2_dma_sg_dmabuf_ops_mmap,
+	.release = vb2_dma_sg_dmabuf_ops_release,
+};
+
+struct dma_buf *vb2_dma_sg_get_dmabuf(void *buf, size_t size, unsigned long flags)
+{
+	struct dma_buf *dbuf;
+	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+
+	exp_info.ops = &vb2_dma_sg_dmabuf_ops;
+	exp_info.size = size;
+	exp_info.flags = flags;
+	exp_info.priv = buf;
+
+	dbuf = dma_buf_export(&exp_info);
+	if (IS_ERR(dbuf))
+		return NULL;
+
+	return dbuf;
+}
+
+
 static int vb2_dma_sg_alloc_compacted(struct vb2_dma_sg_buf *buf,
 		gfp_t gfp_flags)
 {

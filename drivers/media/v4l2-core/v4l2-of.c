@@ -44,6 +44,24 @@ static void v4l2_of_parse_csi_bus(const struct device_node *node,
 			bus->data_lanes[i] = data_lanes[i];
 	}
 
+	prop = of_find_property(node, "lane-polarities", NULL);
+	if (prop) {
+		const __be32 *polarity = NULL;
+		unsigned int i;
+
+		for (i = 0; i < ARRAY_SIZE(bus->lane_polarities); i++) {
+			polarity = of_prop_next_u32(prop, polarity, &v);
+			if (!polarity)
+				break;
+			bus->lane_polarities[i] = v;
+		}
+
+		if (i < 1 + bus->num_data_lanes /* clock + data */) {
+			pr_warn("%s: too few lane-polarities entries (need %u, got %u)\n",
+				node->full_name, 1 + bus->num_data_lanes, i);
+		}
+	}
+
 	if (!of_property_read_u32(node, "clock-lanes", &v)) {
 		bus->clock_lane = v;
 		have_clk_lane = true;

@@ -53,3 +53,5 @@ obj-y	+= msm/
 ccflags-y += -I$(srctree)/drivers/media/i2c
 
 obj-y += msm/
+
+obj-y += qcom/

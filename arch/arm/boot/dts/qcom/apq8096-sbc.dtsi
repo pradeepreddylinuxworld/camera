@@ -813,7 +813,90 @@
 
 &i2c_12 {
 	status = "ok";
+
+	camera_rear@78 {
+		cell-index = <1>;
+		compatible = "ovti,ov5640";
+		reg = <0x78>;
+
+		enable-gpios = <&tlmm 29 0>;
+		reset-gpios = <&tlmm 30 0>;
+		mclk-gpios = <&tlmm 13 0>;
+
+		pinctrl-names = "cam_default", "cam_suspend";
+		pinctrl-0 = <&cam_sensor_mclk0_active &cam_csi0_sensor_active>;
+		pinctrl-1 = <&cam_sensor_mclk0_suspend
+				&cam_csi0_sensor_suspend>;
+
+		vddd-supply = <&vph_pwr_vreg>;
+		vdddo-supply = <&pm8994_lvs1>;
+		vdda-supply = <&pm8994_l18>;
+		clocks = <&clock_mmss clk_mclk0_clk_src>,
+				<&clock_mmss clk_camss_mclk0_clk>;
+		clock-names = "cam_src_clk", "xclk";
+		clock-frequency = <23880000>;
+		status = "ok";
+                port {
+                        ov5640_ep: endpoint {
+                                clock-lanes = <1>;
+                                data-lanes = <0 2>;
+                                remote-endpoint = <&csiphy0_ep>;
+                        };
+                };
+
+	};
+/*
+      camera_rear@76 {
+                cell-index = <1>;
+                compatible = "ovti,ov5645";
+                reg = <0x76>;
+
+                enable-gpios = <&tlmm 26 0>;
+                reset-gpios = <&tlmm 23 0>;
+                mclk-gpios = <&tlmm 13 0>;
+
+                pinctrl-names = "cam_default", "cam_suspend";
+                pinctrl-0 = <&cam_sensor_mclk2_active &cam_csi2_sensor_active>;
+                pinctrl-1 = <&cam_sensor_mclk2_suspend
+                                &cam_csi2_sensor_suspend>;
+
+                vddd-supply = <&vph_pwr_vreg>;
+                vdddo-supply = <&pm8994_lvs1>;
+                vdda-supply = <&pm8994_l18>;
+                clocks = <&clock_mmss clk_mclk2_clk_src>,
+                                <&clock_mmss clk_camss_mclk2_clk>;
+                clock-names = "cam_src_clk", "xclk";
+                clock-frequency = <23880000>;
+                status = "ok";
+                port {
+                        ov5645_ep: endpoint {
+                                clock-lanes = <1>;
+                                data-lanes = <0 2>;
+                                remote-endpoint = <&csiphy0_ep>;
+                        };
+                };
+
+        };
+*/
 };
+
+&camss {
+        ports {
+                #address-cells = <1>;
+                #size-cells = <0>;
+                port@0 {
+                        reg = <0>;
+                        csiphy0_ep: endpoint {
+                                clock-lanes = <1>;
+                                data-lanes = <0 2>;
+                                qcom,settle-cnt = <0xe>;
+                                remote-endpoint = <&ov5640_ep>;
+                                status = "ok";
+                        };
+                };
+        };
+};
+
 
 &spi_11 {
 	status = "ok";
