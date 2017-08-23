@@ -86,7 +86,8 @@ struct camss {
 	struct vfe_device vfe;
 		/*IOMMU driver*/
 	int iommu_hdl;
-//	struct dma_iommu_mapping *mapping;
+    struct device *iommu_dev;
+	struct dma_iommu_mapping *mapping;
 	atomic_t ref_count;
 };
 

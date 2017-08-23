@@ -1,7 +1,7 @@
 config VIDEO_QCOM_CAMSS
         tristate "Qualcomm 8x96 V4L2 Camera Subsystem driver"
         depends on ARCH_MSM && VIDEO_V4L2
-        select VIDEOBUF2_DMA_SG
+        select VIDEOBUF2_DMA_CONTIG
 
 config MSM_CCI
         tristate "Qualcomm MSM camera control interface driver"

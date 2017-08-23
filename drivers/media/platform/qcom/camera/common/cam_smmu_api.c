@@ -9,6 +9,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
+#define DEBUG 1
 #define pr_fmt(fmt) "CAM-SMMU %s:%d " fmt, __func__, __LINE__
 
 #include <linux/module.h>

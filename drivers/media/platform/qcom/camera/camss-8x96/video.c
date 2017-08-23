@@ -21,7 +21,8 @@
 #include <media/v4l2-ioctl.h>
 //#include <media/v4l2-mc.h>
 #include <media/videobuf-core.h>
-#include <media/videobuf2-dma-sg.h>
+//#include <media/videobuf2-dma-sg.h>
+#include <media/videobuf2-dma-contig.h>
 #include <linux/msm_dma_iommu_mapping.h>
 #include <../drivers/media/platform/qcom/camera/common/cam_smmu_api.h>
 
@@ -306,18 +307,19 @@ static int video_buf_init(struct vb2_buffer *vb)
 						   vb);
 	const struct v4l2_pix_format_mplane *format =
 						&video->active_fmt.fmt.pix_mp;
-	struct sg_table *sgt;
+	//struct sg_table *sgt;
 	unsigned int i;
-	int ret = 0;
-	struct dma_buf *dma_buf;
+	//int ret = 0;
+	//struct dma_buf *dma_buf;
 	void *vaddr;
-	dma_addr_t paddr_ptr;
-	size_t len_ptr;
+	//dma_addr_t paddr_ptr;
+	//size_t len_ptr;
 	pr_err("%s: format->num_planes = %d\n", __func__, format->num_planes);
 	for (i = 0; i < format->num_planes; i++) {
 		vaddr = vb2_plane_vaddr(vb, i);
 		pr_err("%s: virtual addr = 0x%p\n", __func__, vaddr);
-		sgt = vb2_dma_sg_plane_desc(vb, i);
+#if 0
+        sgt = vb2_dma_sg_plane_desc(vb, i);
 		if (!sgt)
 			return -EFAULT;
 		buffer->table = sgt;
@@ -344,8 +346,9 @@ static int video_buf_init(struct vb2_buffer *vb)
 					&len_ptr);
 
 #endif
-		buffer->addr[i] = sg_dma_address(sgt->sgl);
-	}
+	//	buffer->addr[i] = sg_dma_address(sgt->sgl);
+#endif
+    }
 
 	if (format->pixelformat == V4L2_PIX_FMT_NV12 ||
 			format->pixelformat == V4L2_PIX_FMT_NV21)
@@ -390,8 +393,12 @@ static int video_buf_prepare(struct vb2_buffer *vb)
 	const struct v4l2_pix_format_mplane *format =
 						&video->active_fmt.fmt.pix_mp;
 	unsigned int i;
+    
+    struct camss_buffer *buffer = container_of(vbuf, struct camss_buffer,vb);
+
 	pr_err("%s: format->num_planes = %d\n", __func__, format->num_planes);
 	for (i = 0; i < format->num_planes; i++) {
+        buffer->addr[i] = vb2_dma_contig_plane_dma_addr(vb, 0);
 		if (format->plane_fmt[i].sizeimage > vb2_plane_size(vb, i))
 			return -EINVAL;
 		pr_err("%s: sizeimage = %d, plane size = %ld\n", __func__, format->plane_fmt[i].sizeimage, vb2_plane_size(vb, i));
@@ -699,7 +706,13 @@ static int video_open(struct file *file)
 	struct v4l2_fh *vfh;
 	int ret;
 	pr_err("[camera] : %s+++++, %d\n", __func__, __LINE__);
-	mutex_lock(&video->lock);
+
+    video->alloc_ctx = vb2_dma_contig_init_ctx(video->camss->iommu_dev);
+    if (IS_ERR(video->alloc_ctx)) {
+    dev_err(&vdev->dev, "Failed to init vb2 dma ctx\n");
+    }
+    
+    mutex_lock(&video->lock);
 
 	vfh = kzalloc(sizeof(*vfh), GFP_KERNEL);
 	if (vfh == NULL) {
@@ -732,7 +745,7 @@ static int video_open(struct file *file)
 error_init_format:
 //	v4l2_pipeline_pm_use(&vdev->entity, 0);
 	msm_camss_pipeline_pm_use(&vdev->entity, 0);
-
+    vb2_dma_contig_cleanup_ctx(video->alloc_ctx);
 error_pm_use:
 	v4l2_fh_release(file);
 
@@ -797,8 +810,9 @@ int msm_video_register(struct camss_video *video, struct v4l2_device *v4l2_dev,
 
 	q = &video->vb2_q;
 	q->drv_priv = video;
-	q->mem_ops = &vb2_dma_sg_memops;
-	q->ops = &msm_video_vb2_q_ops;
+//	q->mem_ops = &vb2_dma_sg_memops;
+    q->mem_ops = &vb2_dma_contig_memops;
+    q->ops = &msm_video_vb2_q_ops;
 	q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
 	q->io_modes = VB2_DMABUF | VB2_MMAP | VB2_READ;
 	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;

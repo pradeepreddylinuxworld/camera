@@ -53,6 +53,7 @@ struct camss_video {
 	enum v4l2_buf_type type;
 	struct media_pipeline pipe;
 	const struct camss_video_ops *ops;
+     void *alloc_ctx;
 	struct mutex lock;
 	struct mutex q_lock;
 	unsigned int bpl_alignment;
